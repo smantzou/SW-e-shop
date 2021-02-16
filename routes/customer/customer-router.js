@@ -6,8 +6,8 @@ const CustomerController = require('./customer-controller')
 
 router.post('/login',CustomerController.login)
 router.post('/register',CustomerController.register)
-router.post('/updateCustomer', CustomerController.updateCustomer)
-router.post('/deleteCustomer',CustomerController.deleteCustomer)
+router.post('/update', CustomerController.updateCustomer)
+router.delete('/:id',CustomerController.deleteCustomer)
 router.get('/', CustomerController.indexCustomers)
 
 

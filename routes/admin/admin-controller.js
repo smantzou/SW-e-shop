@@ -7,7 +7,7 @@ const adminlogin = (req, res, next) => {
     var username = req.body.username
     var password = req.body.password
     if (username == '' || password == '') {
-        res.status(400).json({ status: false, message: "Please enter all fields!" })
+        res.status(400).json({  message: "Please enter all fields!" })
     }
     Admin.findOne({ username: username })
         .then(admin => {
@@ -75,8 +75,7 @@ const registerAdmin = (req, res, next) => {
                                 email: req.body.email,
                                 password: hashedPass,
                                 name: req.body.name,
-                                surname: req.body.surname,
-                                address: req.body.address
+                                surname: req.body.surname
                             })
                             admin.save()
                                 .then(() => {
@@ -153,8 +152,8 @@ const updateAdmin = (req,res,next)=>{
     
 }
 const deleteAdmin = (req,res,next)=>{
-    let ObjId = req.body.ObjId
-    Admin.findByIdAndDelete(ObjId)
+    let adminId = req.params.id
+    Admin.findByIdAndDelete(adminId)
     .then(()=>{
         res.json({
             status : true ,

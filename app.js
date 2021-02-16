@@ -35,6 +35,7 @@ app.listen(port, () => {
  *implement this into the api
  *and see Angular.js tutorials
  *USE STATUS CODES
+ make an api request just for password changes
  *cookies and protected
  *if poss environmentals
  */

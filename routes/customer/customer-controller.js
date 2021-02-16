@@ -162,8 +162,8 @@ const updateCustomer = (req, res, next) => {
 
 }
 const deleteCustomer = (req,res,next)=>{
-    let ObjId = req.body.ObjId
-    Customer.findByIdAndDelete(ObjId)
+    let customerId = req.params.id
+    Customer.findByIdAndDelete(customerId)
     .then(()=>{
         res.json({
             status : true ,

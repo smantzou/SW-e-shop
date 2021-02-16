@@ -75,7 +75,6 @@ const productOrdered = (req, res, next) => {
         inStock: newStock,
         price: req.body.price
     }
-    console.log(newStock)
     if (newStock < 0) {
         res.json({
             status: false,

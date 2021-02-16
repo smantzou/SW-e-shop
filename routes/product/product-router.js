@@ -3,10 +3,10 @@ const router = express.Router()
 
 const ProductController = require('./product-controller')
 
-router.post('/addProduct', ProductController.addProduct)
-router.post('/removeProduct', ProductController.removeProduct)
-router.post('/updateProduct', ProductController.updateProduct)
-router.post('/productOrdered', ProductController.productOrdered)
+router.post('/product', ProductController.addProduct)
+router.delete('/:id', ProductController.removeProduct)
+router.post('/update', ProductController.updateProduct)
+router.post('/order', ProductController.productOrdered)
 router.get('/', ProductController.indexProducts)
 
 
