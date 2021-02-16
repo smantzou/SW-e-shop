@@ -3,11 +3,11 @@ const router = express.Router()
 
 const OrderController = require('./order-controller')
 
-router.post('/addOrder/',OrderController.addOrder)
-router.post('/deleteOrder/:id',OrderController.deleteOrder)
-router.post('/updateOrder', OrderController.updateOrder)
+router.post('/order/',OrderController.addOrder)
+router.delete('/:id',OrderController.deleteOrder)
+router.post('/updateOrder/', OrderController.updateOrder)
 router.get('/',OrderController.indexOrders)
-router.get('/getCustomerOrders',OrderController.getCustomerOrders)
+router.get('/customer/:id',OrderController.getCustomerOrders)
 
 
 

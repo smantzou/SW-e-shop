@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 app.use(authMiddleware)
-app.use('/api',routes)
+app.use('/api', routes)
 
 
 app.listen(port, () => {
@@ -31,15 +31,10 @@ app.listen(port, () => {
 })
 
 /**
- * Make categories for products not something crazy just suppose an eshop and 3 simple categories to classify the items in the collection
- * implement this into the api 
- * start the postman collection 
- * and see Angular.js tutorials 
- * Change verbs of endpoints to nouns for example to make a new user [POST] localhost://3000/api/user thats the format 
- * USE DELETE METHOD
- * NEST THE API 
- * USE STATUS CODES
- * QUERY PARAMETERS ON URL
- * cookies and protected 
- * if poss environmentals
+ *Make categories for products not something crazy just suppose an eshop and 3 simple categories to classify the items in the collection
+ *implement this into the api
+ *and see Angular.js tutorials
+ *USE STATUS CODES
+ *cookies and protected
+ *if poss environmentals
  */
