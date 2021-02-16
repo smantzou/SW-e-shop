@@ -121,6 +121,7 @@ const updateAdmin = (req,res,next)=>{
                     message: "An error occured"
                 })
             }
+            
             let updatedAdmin = {
                 username: req.body.username,
                 email: req.body.email,
