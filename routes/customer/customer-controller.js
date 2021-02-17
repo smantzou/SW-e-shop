@@ -114,7 +114,7 @@ const register = (req, res, next) => {
 }
 const updateCustomer = (req, res, next) => {
 
-    if ((req.body.username == '') || (req.body.email == '') || (req.body.password == '') || (req.body.name == '') || (req.body.surname == '') || (req.body.address == '') || (req.body.telephoneNumber == '')) {
+    if ((req.body.ObjId==null)||(req.body.username == '') || (req.body.email == '') || (req.body.password == '') || (req.body.name == '') || (req.body.surname == '') || (req.body.address == '') || (req.body.telephoneNumber == '')) {
         res.json({
             status: false,
             message: "Please enter all fields"

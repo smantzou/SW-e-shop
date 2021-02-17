@@ -1,11 +1,12 @@
 const { response } = require('express')
 const Order = require('../../models/Order')
+const Product = require('../../models/Product')
 const mongoose = require('mongoose')
 
 const addOrder = (req, res, next) => {
-    
-    if ((req.body.orderedBy = null) || (req.body.productOrdered = null) || (req.body.paymentMethod == null) || (req.body.orderedAt == null) || (req.body.quantity == null)) {
-        
+
+    if ((req.body.orderedBy == null) || (req.body.productOrdered == null) || (req.body.paymentMethod == null) || (req.body.orderedAt == null) || (req.body.quantity == null)) {
+
         res.json({
             status: false,
             message: 'Order information missing!'
@@ -13,8 +14,8 @@ const addOrder = (req, res, next) => {
         res.end()
     }
     else {
-        customerId = mongoose.Types.ObjectId(req.body.orderedBy)
-        productId = mongoose.Types.ObjectId(req.body.productOrdered)
+        let customerId = req.body.orderedBy
+        let productId = req.body.productOrdered
         let order = new Order({
             orderedBy: customerId,
             productOrdered: productId,
@@ -22,20 +23,86 @@ const addOrder = (req, res, next) => {
             paymentMethod: req.body.paymentMethod,
             quantity: req.body.quantity
         })
-        
-        order.save()
-            .then(() => {
-                res.json({
-                    status: true,
-                    message: 'Order placed successfully!'
+        Product.findOne({_id:productId},function(error,product){
+            if(product){
+                product.inStock = product.inStock - parseInt(order.quantity)
+                if(product.inStock>0){
+                    Product.findByIdAndUpdate(productId,{$set:product})
+                .then(()=>{
+                    order.save()
+                    .then(()=>{
+                        res.json({
+                            status : true,
+                            message : "Order and product quantity updated"
+                        })
+                        res.end()
+                    })
+                    .catch(error=>{
+                        res.json({
+                            status : false,
+                            message : error
+                        })
+                        res.end()
+                    })
                 })
-            })
-            .catch(error => {
+                .catch(error=>{
+                    res.json({
+                        status : false,
+                        message : error
+                    })
+                    res.end()
+                })
+                }
+                else{
+                    res.json({
+                        status : false ,
+                        message : "Requested quantity exceeds product stock!"
+                    })
+                }
+                
+                
+
+            }
+            else{
                 res.json({
                     status: false,
-                    message: error
+                    message : "Non valid product Id"
                 })
-            })
+            }
+        })
+        
+        
+        
+        // Product.findByIdAndUpdate(productId, { $set: {inStock: inStock - parseInt(req.body.quantity)} })
+        //     .then(() => {
+        //         console.log("Product quantity updated successfully!")
+        //     })
+        //     .catch(error => {
+        //         res.json({
+        //             status: false,
+        //             message: error
+        //         })
+        //         res.end()
+        //     })
+
+        // order.save()
+        //     .then(() => {
+        //         res.json({
+        //             status: true,
+        //             message: 'Order placed successfully!'
+        //         })
+        //     })
+        //     .catch(error => {
+        //         res.json({
+        //             status: false,
+        //             message: error
+        //         })
+        //     })
+
+
+
+
+
     }
 }
 const deleteOrder = (req, res, next) => {

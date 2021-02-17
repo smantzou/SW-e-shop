@@ -3,12 +3,12 @@ const Schema = mongoose.Schema;
 
 const orderSchema = new Schema(
     {
-        orderedBy : [{
-            type : mongoose.Schema.Types.ObjectId, ref:'Customer',
-        }],
-        productOrdered : [{
-            type : mongoose.Schema.Types.ObjectId, ref:'Product',
-        }],
+        orderedBy : {
+            type : String
+        },
+        productOrdered : {
+            type : String
+        },
         orderedAt : {
             type : Date,
         },

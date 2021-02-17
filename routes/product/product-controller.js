@@ -64,42 +64,7 @@ const updateProduct = (req, res, next) => {
 
 
 }
-const productOrdered = (req, res, next) => {
-    let ObjId = req.body.ObjId
-    let quantityOrdered = req.body.quantityOrdered
-    let newStock = parseInt(req.body.inStock) - parseInt(quantityOrdered)
-    console.log(req.body.inStock,quantityOrdered)
-    let updatedProduct = {
-        title: req.body.title,
-        description: req.body.description,
-        inStock: newStock,
-        price: req.body.price
-    }
-    if (newStock < 0) {
-        res.json({
-            status: false,
-            message: 'Quantity ordered larger than Stock'
-        })
-        res.end()
-    }
-    else{
-        Product.findByIdAndUpdate(ObjId, { $set: updatedProduct }, { new: true })
-        .then(() => {
-            res.json({
-                status: true,
-                message: 'Product quantity was decreased'
-            })
-        })
-        .catch(error => {
-            res.json({
-                status: false,
-                message: error
-            })
-        })
-    }
-    
 
-}
 const indexProducts = (req,res,next)=>{
     Product.find()
     .then(response=>{
@@ -121,5 +86,5 @@ const indexProducts = (req,res,next)=>{
 
 
 module.exports = {
-    addProduct, removeProduct, updateProduct, productOrdered, indexProducts
+    addProduct, removeProduct, updateProduct, indexProducts
 }
