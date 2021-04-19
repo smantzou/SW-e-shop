@@ -5,6 +5,7 @@ import { databaseLogger } from './loggers/database';
 import { appLogger } from './loggers/app';
 import * as mongoose from 'mongoose';
 import errorMiddleware from './middleware/error';
+import * as cookieParser from 'cookie-parser';
 
 class App {
   public app: express.Application;
@@ -21,6 +22,7 @@ class App {
 
   private initializeMiddlewares() {
     this.app.use(bodyParser.json());
+    this.app.use(cookieParser());
   }
 
   private initializeControllers(controllers) {

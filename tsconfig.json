@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es2021",
+    "experimentalDecorators": true,
+    "target": "ES5",
     "module": "commonjs",
     "outDir": "/dist",
     "sourceMap": true,
