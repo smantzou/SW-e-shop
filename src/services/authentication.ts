@@ -1,35 +1,36 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import * as express from 'express';
 import * as bcrypt from 'bcryptjs';
-import CreateCustomerDto from 'dtos/customer';
-import CustomerWithThatEmailAlreadyExistsException from '../exceptions/CustomerWithThatEmailAlreadyExistsException';
+import CreateUserDto from 'dtos/user';
+import UserWithThatEmailAlreadyExistsException from '../exceptions/UserWithThatEmailAlreadyExistsException';
 import WrongCredentialsException from '../exceptions/WrongCredentialsException';
 import { secret } from '../config/index';
 import tokenData from '../interfaces/tokenData';
-import customerModel from '../models/customer';
+import userModel from '../models/user';
 import LogInDto from '../dtos/logIn';
-import Customer from 'interfaces/customer';
+import User from 'interfaces/user';
 import DataStoredInToken from 'interfaces/DataStoredInToken';
 import * as jwt from 'jsonwebtoken';
 
 const registration = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
-  const customerData: CreateCustomerDto = request.body;
-  if (await customerModel.findOne({ email: customerData.email })) {
-    next(new CustomerWithThatEmailAlreadyExistsException(customerData.email));
+  const userData: CreateUserDto = request.body;
+  if (await userModel.findOne({ email: userData.email })) {
+    next(new UserWithThatEmailAlreadyExistsException(userData.email));
   } else {
-    const hashedPassword = await bcrypt.hash(customerData.password, 10);
-    const customer = await customerModel.create({
-      ...customerData,
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    const user = await userModel.create({
+      ...userData,
       password: hashedPassword,
     });
-    customer.password = undefined;
-    const tokenData: tokenData = createToken(customer);
+    user.password = undefined;
+    const tokenData: tokenData = createToken(user);
     response.cookie('Set-Cookie', [createCookie(tokenData)]);
-    response.send(customer);
+    response.send(user);
   }
 };
 
-function createToken(customer: Customer) {
+function createToken(customer: User) {
   const expiresIn = 60 * 60; // an hour
 
   const dataStoredInToken: DataStoredInToken = {
@@ -43,7 +44,7 @@ function createToken(customer: Customer) {
 
 const loggingIn = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
   const logInData: LogInDto = request.body;
-  const customer = await customerModel.findOne({ email: logInData.email });
+  const customer = await userModel.findOne({ email: logInData.email });
   if (customer) {
     const isPasswordMatching = await bcrypt.compare(logInData.password, customer.password);
     if (isPasswordMatching) {
@@ -63,9 +64,9 @@ const createCookie = async (tokenData: tokenData) => {
   return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn}`;
 };
 
-const loggingOut = (request: express.Request, response: express.Response) => {
-  response.cookie('Set-Cookie', ['Authorization=;Max-age=0']);
-  response.send(200);
+const loggingOut = (request: express.Request, response: express.Response, next: express.NextFunction) => {
+  response.clearCookie('Set-Cookie');
+  response.sendStatus(200);
 };
 
 export { loggingIn, registration, loggingOut };

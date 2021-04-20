@@ -2,9 +2,9 @@ import * as express from 'express';
 
 import Controller from '../interfaces/controller';
 import validationMiddleware from '../middleware/validation';
-import CreateCustomerDto from '../dtos/customer';
+import CreateUserDto from '../dtos/user';
 import LogInDto from '../dtos/logIn';
-import { registration, loggingIn } from '../services/authorization';
+import { registration, loggingIn, loggingOut } from '../services/authentication';
 
 class AuthenticationController implements Controller {
   public path = '/auth';
@@ -15,8 +15,9 @@ class AuthenticationController implements Controller {
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}/register`, validationMiddleware(CreateCustomerDto), registration);
+    this.router.post(`${this.path}/register`, validationMiddleware(CreateUserDto), registration);
     this.router.post(`${this.path}/login`, validationMiddleware(LogInDto), loggingIn);
+    this.router.get(`${this.path}/logout`, loggingOut);
   }
 }
 

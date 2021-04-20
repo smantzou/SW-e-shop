@@ -1,4 +1,4 @@
-interface Customer {
+interface User {
   _id: string;
   name: string;
   surname: string;
@@ -9,4 +9,4 @@ interface Customer {
   telephoneNumber: number;
 }
 
-export default Customer;
+export default User;

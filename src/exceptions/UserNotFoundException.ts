@@ -1,9 +1,9 @@
 import HttpException from './HttpException';
 
-class CustomerNotFoundException extends HttpException {
+class UserNotFoundException extends HttpException {
   constructor(id: string) {
     super(404, `Customer with id ${id} not found`);
   }
 }
 
-export default CustomerNotFoundException;
+export default UserNotFoundException;

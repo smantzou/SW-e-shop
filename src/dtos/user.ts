@@ -1,6 +1,6 @@
 import { IsString, IsNumber } from 'class-validator';
 
-class CreateCustomerDto {
+class CreateUserDto {
   @IsString()
   public name: string;
   @IsString()
@@ -17,4 +17,4 @@ class CreateCustomerDto {
   public telephoneNumber: number;
 }
 
-export default CreateCustomerDto;
+export default CreateUserDto;
