@@ -12,8 +12,9 @@ import LogInDto from '../dtos/logIn';
 import User from 'interfaces/user';
 import DataStoredInToken from 'interfaces/DataStoredInToken';
 import * as jwt from 'jsonwebtoken';
+import RequestWithUser from '../interfaces/requestWithUser';
 
-const registration = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+const registration = async (request: RequestWithUser, response: express.Response, next: express.NextFunction) => {
   const userData: CreateUserDto = request.body;
   if (await userModel.findOne({ email: userData.email })) {
     next(new UserWithThatEmailAlreadyExistsException(userData.email));
@@ -26,7 +27,9 @@ const registration = async (request: express.Request, response: express.Response
     user.password = undefined;
     const tokenData: tokenData = createToken(user);
     response.cookie('Set-Cookie', [createCookie(tokenData)]);
-    response.send(user);
+    response.status(200).json({
+      User: user,
+    });
   }
 };
 
@@ -51,7 +54,9 @@ const loggingIn = async (request: express.Request, response: express.Response, n
       customer.password = undefined;
       const tokenData: tokenData = createToken(customer);
       response.cookie('Set-Cookie', [createCookie(tokenData)]);
-      response.send(customer);
+      response.status(200).json({
+        Customer: customer,
+      });
     } else {
       next(new WrongCredentialsException());
     }
