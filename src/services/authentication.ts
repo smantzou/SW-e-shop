@@ -26,7 +26,7 @@ const registration = async (request: RequestWithUser, response: express.Response
     });
     user.password = undefined;
     const tokenData: tokenData = createToken(user);
-    response.cookie('Set-Cookie', [createCookie(tokenData)]);
+    response.setHeader('Set-Cookie', [createCookie(tokenData)]);
     response.status(200).json({
       User: user,
     });
@@ -53,7 +53,7 @@ const loggingIn = async (request: express.Request, response: express.Response, n
     if (isPasswordMatching) {
       customer.password = undefined;
       const tokenData: tokenData = createToken(customer);
-      response.cookie('Set-Cookie', [createCookie(tokenData)]);
+      response.setHeader('Set-Cookie', createCookie(tokenData));
       response.status(200).json({
         Customer: customer,
       });
@@ -65,9 +65,9 @@ const loggingIn = async (request: express.Request, response: express.Response, n
   }
 };
 
-const createCookie = async (tokenData: tokenData) => {
-  return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn}`;
-};
+function createCookie(tokenData: tokenData) {
+  return `Authentication=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn}`;
+}
 
 const loggingOut = (request: express.Request, response: express.Response, next: express.NextFunction) => {
   response.clearCookie('Set-Cookie');

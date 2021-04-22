@@ -8,4 +8,4 @@ const app = new App([new AuthenticationController(), new UserController(), new P
 app.listen();
 
 //https://wanago.io/2018/12/24/typescript-express-registering-authenticating-jwt/
-//kane error handling kai exception teleiwse to user resource
+//ftiakse to auth middleware

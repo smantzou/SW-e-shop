@@ -1,4 +1,4 @@
-import { IsString, IsNumber } from 'class-validator';
+import { IsString, IsNumber, IsInt } from 'class-validator';
 
 class CreateUserDto {
   @IsString()
@@ -14,6 +14,7 @@ class CreateUserDto {
   @IsString()
   public address: string;
   @IsNumber()
+  @IsInt()
   public telephoneNumber: number;
 }
 
