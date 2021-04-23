@@ -8,6 +8,7 @@ import WrongCredentialsException from '../exceptions/WrongCredentialsException';
 import CreateOrderDto from '../dtos/order';
 import productModel from '../models/product';
 import QuantityOrderedGreaterThanInStockException from '../exceptions/QuantityOrderedGreaterThanInStockException';
+import { v4 as uuidv4 } from 'uuid';
 
 const getAllOrders = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
   try {
@@ -39,7 +40,7 @@ const createAnOrder = async (request: RequestWithOrder, response: express.Respon
   const orderData: CreateOrderDto = request.body;
   const productId = orderData.product;
   const time = new Date();
-
+  const newUuid = uuidv4();
   try {
     const productThatWasOrdered = await productModel.findById({ _id: productId });
     const productJSON = productThatWasOrdered.toJSON();
@@ -51,6 +52,7 @@ const createAnOrder = async (request: RequestWithOrder, response: express.Respon
     const order = await orderModel.create({
       ...orderData,
       date: time,
+      uuid: newUuid,
     });
 
     response.status(200).json({
@@ -63,7 +65,10 @@ const createAnOrder = async (request: RequestWithOrder, response: express.Respon
 const deleteAnOrder = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
   const _id = request.params.id;
   try {
-    await orderModel.findByIdAndDelete({ _id });
+    const deleteResult = await orderModel.findByIdAndDelete({ _id });
+    if (!deleteResult) {
+      return next(new WrongCredentialsException());
+    }
     return response.sendStatus(200);
   } catch (error) {
     return next(new WrongCredentialsException());
