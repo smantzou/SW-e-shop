@@ -67,7 +67,7 @@ const getUserById = async (request: express.Request, response: express.Response,
       return next(new NotFoundException());
     }
     return response.status(200).json({
-      user,
+      User: user,
     });
   } catch (error) {
     return next(new WrongCredentialsException());
