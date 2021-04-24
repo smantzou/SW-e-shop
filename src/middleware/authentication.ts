@@ -15,10 +15,10 @@ function extractAuthToken(cookies: { Auth: string }) {
 
 async function authMiddleware(request: Request, response: Response, next: NextFunction) {
   const cookies = request.cookies;
-  const auth = extractAuthToken(cookies);
 
   if (cookies.Auth) {
     try {
+      const auth = extractAuthToken(cookies);
       const verificationResponse = jwt.verify(auth, secret) as DataStoredInToken;
       const id = verificationResponse._id;
       const user = await userModel.findById(id);

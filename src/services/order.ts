@@ -9,6 +9,7 @@ import CreateOrderDto from '../dtos/order';
 import productModel from '../models/product';
 import QuantityOrderedGreaterThanInStockException from '../exceptions/QuantityOrderedGreaterThanInStockException';
 import { v4 as uuidv4 } from 'uuid';
+import userModel from '../models/user';
 
 const getAllOrders = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
   try {
@@ -75,4 +76,23 @@ const deleteAnOrder = async (request: express.Request, response: express.Respons
   }
 };
 
-export { getAllOrders, getOrderById, createAnOrder, deleteAnOrder };
+const getAllOrdersOfCustomer = async (
+  request: express.Request,
+  response: express.Response,
+  next: express.NextFunction,
+) => {
+  const _id = request.params.id;
+  try {
+    const user = await userModel.findById({ _id });
+    const ordersOfCustomer = await orderModel.find({
+      customer: user.id,
+    });
+    return response.status(200).json({
+      Orders: ordersOfCustomer,
+    });
+  } catch (error) {
+    return next(new WrongCredentialsException());
+  }
+};
+
+export { getAllOrders, getOrderById, createAnOrder, deleteAnOrder, getAllOrdersOfCustomer };

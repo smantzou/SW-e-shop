@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { getAllOrders, getOrderById, createAnOrder, deleteAnOrder } from '../services/order';
+import { getAllOrders, getOrderById, createAnOrder, deleteAnOrder, getAllOrdersOfCustomer } from '../services/order';
 import validationMiddleware from '../middleware/validation';
 import authMiddleware from '../middleware/authentication';
 import Controller from '../interfaces/controller';
@@ -17,6 +17,7 @@ class OrderController implements Controller {
     this.router.get(`${this.path}/:id`, authMiddleware, getOrderById);
     this.router.post(`${this.path}/`, authMiddleware, validationMiddleware(CreateOrderDto), createAnOrder);
     this.router.delete(`${this.path}/:id`, authMiddleware, deleteAnOrder);
+    this.router.get(`${this.path}/customer/:id`, authMiddleware, getAllOrdersOfCustomer);
   }
 }
 
